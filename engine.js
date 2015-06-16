@@ -1,4 +1,5 @@
 var Game = new function() {
+    var boards = [];
     
     //Game Initialization
     this.initialize = function(canvasElementId, sprite_data, callback) {
@@ -18,13 +19,13 @@ var Game = new function() {
         // Set up input
         this.setupInput();
         
-        // Adding Mobile Settings
+        // Start the game loop
+        this.loop();
+        
+         // Adding Mobile Settings
         if(this.mobile) {
             this.setBoard(4, new TouchControls());
         }
-        
-        // Start the game loop
-        this.loop();
         
         //load the sprite sheet and pass forward the call back
         SpriteSheet.load(sprite_data, callback);
@@ -51,7 +52,7 @@ var Game = new function() {
     };
     
     // Game Loop
-    var boards = [];
+    
     
     this.loop = function() {
         var dt = 30/1000;
@@ -84,16 +85,16 @@ var Game = new function() {
             w = window.innerWidth; h = window.innerHeight
         }
         
-        container.style.height = h * 2 + 'px';
+        container.style.height = h * 2 + "px";
         window.scrollTo(0,1);
-        h = window.innerHeight + 2;
         
+        h = window.innerHeight + 2;
         container.style.height = h + "px";
         container.style.whiteSpace = w + "px";
         container.style.padding = 0;
         
         if(h >= this.canvas.height * 1.75 ||
-           swx >= this.canvas.height * 1.75 ) {
+           w >= this.canvas.height * 1.75 ) {
             this.canvasMultiplier = 2;
             this.canvas.width = w / 2;
             this.canvas.height = h / 2;
@@ -108,7 +109,7 @@ var Game = new function() {
         this.canvas.style.top = "0px";
     };
     
-    return this;
+    
 };
 
 var SpriteSheet = new function() {
@@ -130,8 +131,9 @@ var SpriteSheet = new function() {
                       s.w, s.h,
                       Math.floor(x), Math.floor(y),
                       s.w, s.h);
-    };     
-}
+    }; 
+    return this;
+};
 
 var TitleScreen = function TitleScreen(title, subtitle, callback) {
     var up = false;
@@ -325,7 +327,7 @@ Level.prototype.draw = function(ctx) {  };
 var TouchControls = function() {
     var gutterWidth = 10;
     var unitWidth = Game.width / 5;
-    var blockWidth = unitWidth-gutterWidth
+    var blockWidth = unitWidth-gutterWidth;
     
     this.drawSquare = function(ctx, x, y, txt, on) {
         ctx.globalAlpha = on ? 0.9 : 0.6;
@@ -390,3 +392,25 @@ var TouchControls = function() {
     Game.canvas.addEventListener('touchend', this.trackTouch, true);
     Game.playerOffset = unitWidth + 20;
 };
+
+//Points System
+var GamePoints = function() {
+    Game.points = 0;
+    var pointsLength = 8;
+    this.draw = function(ctx) {
+        ctx.save();
+        
+        ctx.font = "bold 18px arial";
+        ctx.fillStyle = "#FFFFFF";
+        
+        var txt = "" + Game.points;
+        
+        var i = pointsLength - txt.length, zeros = "";
+        while(i-- > 0) { zeros += "0"; }
+        
+        ctx.fillText(zeros + txt, 10, 20);
+        
+        ctx.restore();
+    }
+    this.step = function(dt) {  }
+}
