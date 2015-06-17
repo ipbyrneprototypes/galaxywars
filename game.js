@@ -56,14 +56,38 @@ var level1 = [
   [ 22000,  25000, 400, 'wiggle', { x: 100 }]
 ];
 
+var level2 = [
+ // Start,   End, Gap,  Type,   Override
+  [ 0,      4000,  500, 'circle' ],
+  [ 6000,   13000, 800, 'ltr' ],
+  [ 10000,  16000, 400, 'step' ],
+  [ 17800,  20000, 500, 'straight', { x: 50 } ],
+  [ 18200,  20000, 500, 'straight', { x: 90 } ],
+  [ 18200,  20000, 500, 'straight', { x: 10 } ],
+  [ 22000,  25000, 400, 'wiggle', { x: 150 }],
+  [ 22000,  25000, 400, 'wiggle', { x: 100 }]
+];
 
 
 var playGame = function() {
   var board = new GameBoard();
   board.add(new PlayerShip());
-  board.add(new Level(level1,winGame));
+  board.add(new Level(level1,beatLevel));
   Game.setBoard(3,board);
   Game.setBoard(5,new GamePoints(0));
+};
+
+var playGame2 = function() {
+  var board = new GameBoard();
+  board.add(new PlayerShip());
+  board.add(new Level(level2,winGame));
+  Game.setBoard(3,board);
+};
+
+var beatLevel = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!", 
+                                  "Press fire to begin the next mission!",
+                                  playGame2));
 };
 
 var winGame = function() {
