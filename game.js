@@ -5,6 +5,7 @@ var sprites = {
  enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
  enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
  enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+ enemy_boss1: { sx: 191, sy: 0, w: 42, h: 43, frames: 1 },    
  explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
  enemy_missile: { sx: 9, sy: 42, w: 3, h: 20, frame: 1, }
 };
@@ -13,13 +14,17 @@ var enemies = {
   straight: { x: 0,   y: -50, sprite: 'enemy_ship', health: 10, 
               E: 100 },
   ltr:      { x: 0,   y: -100, sprite: 'enemy_purple', health: 10, 
-              B: 75, C: 1, E: 100, missiles: 2  },
+              B: 75, C: 1, E: 100, missiles: 2, points: 150  },
   circle:   { x: 250,   y: -50, sprite: 'enemy_circle', health: 10, 
-              A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2 },
+              A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2, points: 125 },
   wiggle:   { x: 100, y: -50, sprite: 'enemy_bee', health: 20, 
-              B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2 },
+              B: 50, C: 4, E: 100, firePercentage: 0.001, missiles: 2, points: 200 },
   step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
-              B: 150, C: 1.2, E: 75 }
+              B: 150, C: 1.2, E: 75, points: 125 },
+  boss1circle:   { x: 250,   y: -50, sprite: 'enemy_boss1', health: 70, 
+              A: 0,  B: -100, C: 1, E: 20, F: 100, G: 1, H: Math.PI/2, firePercentage: 0.001, missiles: 2, points: 500 },
+  boss1step:     { x: 0,   y: -50, sprite: 'enemy_boss1', health: 70,
+              B: 150, C: 2, E: 20, points: 500 },
 };
 
 var OBJECT_PLAYER = 1,
@@ -51,7 +56,7 @@ var startGame = function() {
 
 var level1 = [
  // Start,   End, Gap,  Type,   Override
-  [ 0,      4000,  500, 'step' ],
+  [ 0,      4000,  500, 'circle' ],
   [ 6000,   13000, 800, 'ltr' ],
   [ 10000,  16000, 400, 'circle' ],
   [ 17800,  20000, 500, 'straight', { x: 50 } ],
@@ -78,7 +83,7 @@ var level2 = [
 var level3 = [
  // Start,   End, Gap,  Type,   Override
   [ 0,       4000, 500, 'wiggle', { x: 127 } ],
-  [ 6000,   13000, 800, 'straight', { x: 450 } ],
+  [ 6000,   13000, 800, 'straight', { x: 270 } ],
   [ 10000,  16000, 400, 'step' ],
   [ 12000,  16000, 500, 'wiggle', { x: 75 }],    
   [ 17800,  20000, 500, 'straight', { x: 350 } ],
@@ -92,22 +97,52 @@ var level3 = [
 
 var level4 = [
  // Start,   End, Gap,  Type,   Override
-  [ 0,       4000, 500, 'wiggle', { x: 300 } ],
+  [ 0,       4000, 500, 'wiggle', { x: 270 } ],
   [ 0,       4000, 500, 'wiggle', { x: 15 } ],
-  [ 6000,   13000, 800, 'straight', { x: 450 } ],
+  [ 6000,   13000, 800, 'straight', { x: 230 } ],
   [ 8000,   12000, 500, 'circle' ],
   [ 10000,  16000, 400, 'step' ],
   [ 12000,  16000, 500, 'wiggle', { x: 95 }],    
-  [ 17800,  20000, 500, 'straight', { x: 350 } ],
+  [ 17800,  20000, 500, 'straight', { x: 310 } ],
   [ 17800,  20000, 500, 'circle' ],
   [ 18200,  20000, 800, 'straight', { x: 240 } ],
-  [ 18200,  20000, 500, 'circle' ],
+  [ 18200,  20000, 500, 'step' ],
   [ 18200,  20000, 500, 'straight', { x: 100 } ],
   [ 19000,  23000, 500, 'circle' ],
   [ 22000,  25000, 700, 'wiggle', { x: 230 }],
   [ 22000,  25000, 400, 'straight', { x: 125 } ],
   [ 22000,  25000, 400, 'straight', { x: 64 } ],
-  [ 22000,  25000, 400, 'straight', { x: 385 } ]
+  [ 22000,  25000, 400, 'straight', { x: 295 } ]
+];
+
+var level5 = [
+ // Start,   End, Gap,  Type,   Override
+  [ 0,       4000, 500, 'circle', { x: 270 } ],
+  [ 0,       4000, 500, 'ltr', { x: 55 } ],
+  [ 1800,    5000, 500, 'wiggle', { x: 125 } ],
+  [ 6000,   13000, 800, 'straight', { x: 200 } ],
+  [ 8000,   12000, 500, 'circle' ],
+  [ 10000,  16000, 400, 'step' ],
+  [ 12000,  16000, 500, 'wiggle', { x: 120 }],    
+  [ 17800,  20000, 500, 'straight', { x: 155 } ],
+  [ 17800,  20000, 500, 'circle' ],
+  [ 18200,  20000, 800, 'straight', { x: 240 } ],
+  [ 18200,  20000, 500, 'step' ],
+  [ 18200,  20000, 500, 'straight', { x: 100 } ],
+  [ 19000,  23000, 500, 'circle' ],
+  [ 22000,  25000, 700, 'wiggle', { x: 50 }],
+  [ 22000,  25000, 400, 'straight', { x: 240 } ],
+  [ 22000,  25000, 400, 'straight', { x: 100 } ]
+];
+
+var level5boss = [
+ // Start,   End, Gap,  Type,   Override
+  [ 0,       4000,2000, 'boss1circle', { x: 230 } ],
+  [ 0,       4000,2000, 'boss1step', { x: 15 } ],
+  [ 0,       4000,2000, 'boss1step', { x: 65 } ],
+  [ 10000,  12000,1000, 'boss1circle' ],
+  [ 18800,  20800,1000, 'boss1step', { x: 10 } ],
+  [ 22000,  24000,2000, 'boss1step', { x: 45 } ],
 ];
 
 
@@ -146,9 +181,27 @@ var playGame3 = function() {
 var playGame4 = function() {
   var board = new GameBoard();
   board.add(new PlayerShip());
-  board.add(new Level(level4,winGame));
+  board.add(new Level(level4,beatLevel4));
   Game.setBoard(3,board);
 };
+
+// FIFTH LEVEL PART 1
+var playGame5 = function() {
+  var board = new GameBoard();
+  board.add(new PlayerShip());
+  board.add(new Level(level5,beatLevel5));
+  Game.setBoard(3,board);
+};
+
+// FIFTH LEVEL PART 2(BOSS)
+var playGame5boss = function() {
+  var board = new GameBoard();
+  board.add(new PlayerShip());
+  board.add(new Level(level5boss,winGame));
+  Game.setBoard(3,board);
+};
+
+// SIXTH LEVEL
 
 //*****************************************************
 // TRANSITION/LOADING SCREENS
@@ -157,7 +210,7 @@ var playGame4 = function() {
 // Level 1 Complete Screen
 var beatLevel1 = function() {
   Game.setBoard(3,new TitleScreen("Misson Complete!",
-                                  "1 out of 10 Missions Complete!",
+                                  "1 out of 5 Missions Complete!",
                                   "Press fire to begin the next mission!",
                                   playGame2));
 };
@@ -166,7 +219,7 @@ var beatLevel1 = function() {
 // Level 2 Complete Screen
 var beatLevel2 = function() {
   Game.setBoard(3,new TitleScreen("Misson Complete!",
-                                  "2 out of 10 Missions Complete!",
+                                  "2 out of 5 Missions Complete!",
                                   "Press fire to begin the next mission!",
                                   playGame3));
 };
@@ -174,16 +227,40 @@ var beatLevel2 = function() {
 // Level 3 Complete Screen
 var beatLevel3 = function() {
   Game.setBoard(3,new TitleScreen("Misson Complete!",
-                                  "3 out of 10 Missions Complete!",
+                                  "3 out of 5 Missions Complete!",
                                   "Press fire to begin the next mission!",
                                   playGame4));
+};
+
+// Level 4 Complete Screen
+var beatLevel4 = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!",
+                                  "4 out of 5 Missions Complete!",
+                                  "Press fire to begin the next mission!",
+                                  playGame5));
+};
+
+// Level 5 Part 1 Complete Screen
+var beatLevel5 = function() {
+  Game.setBoard(3,new TitleScreen("WARNING! WANRING!",
+                                  "GOLDEN GUARD APPROACHING!",
+                                  "Press fire to egnage!",
+                                  playGame5boss));
+};
+
+// Level 5 Boss Complete Screen
+var beatLevel5boss = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!",
+                                  "5 out of 10 Missions Complete!",
+                                  "Press fire to begin the next mission!",
+                                  playGame6));
 };
 
 
 // Beat Game Screen
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You Win!", 
-                                  "You Saved the Galaxy!",
+  Game.setBoard(3,new TitleScreen("You Saved the Galaxy!", 
+                                  "5 out of 5 Missions Complete!",
                                   "Press fire to play again",
                                   playGame));
 };
