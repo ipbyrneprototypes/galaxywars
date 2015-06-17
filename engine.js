@@ -170,7 +170,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
   };
 
   this.draw = function(ctx) {
-    ctx.fillStyle = "#2bb96b";
+    ctx.fillStyle = "#005451";
 
     ctx.font = "bold 40px bangers";
     var measure = ctx.measureText(title);  
