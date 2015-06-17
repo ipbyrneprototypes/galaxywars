@@ -162,7 +162,7 @@ var SpriteSheet = new function() {
   return this;
 };
 
-var TitleScreen = function TitleScreen(title,subtitle,callback) {
+var TitleScreen = function TitleScreen(title,subtitle,subtitle1,callback) {
   var up = false;
   this.step = function(dt) {
     if(!Game.keys['fire']) up = true;
@@ -170,15 +170,20 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
   };
 
   this.draw = function(ctx) {
-    ctx.fillStyle = "#005451";
+    ctx.fillStyle = "#FFF";
 
-    ctx.font = "bold 40px bangers";
+    ctx.font = "bold 18px 'Press Start 2P'";
     var measure = ctx.measureText(title);  
     ctx.fillText(title,Game.width/2 - measure.width/2,Game.height/2);
 
-    ctx.font = "bold 20px bangers";
+    ctx.font = "bold 10px 'Press Start 2P'";
     var measure2 = ctx.measureText(subtitle);
-    ctx.fillText(subtitle,Game.width/2 - measure2.width/2,Game.height/2 + 40);
+    ctx.fillText(subtitle,Game.width/2 - measure2.width/2,Game.height/2 + 30);
+      
+    ctx.font = "bold 8px 'Press Start 2P'";
+    var measure2 = ctx.measureText(subtitle1);
+    ctx.fillText(subtitle1,Game.width/2 - measure2.width/2,Game.height/2 + 60);
+     
   };
 };
 
@@ -432,11 +437,11 @@ var TouchControls = function() {
 var GamePoints = function() {
   Game.points = 0;
 
-  var pointsLength = 8;
+  var pointsLength = 7;
 
   this.draw = function(ctx) {
     ctx.save();
-    ctx.font = "bold 18px arial";
+    ctx.font = "bold 12px 'Press Start 2P'";
     ctx.fillStyle= "#FFFFFF";
 
     var txt = "" + Game.points;

@@ -39,10 +39,15 @@ var startGame = function() {
     Game.setBoard(1,new Starfield(50,0.6,100));
     Game.setBoard(2,new Starfield(100,1.0,50));
   }  
-  Game.setBoard(3,new TitleScreen("Space Invader", 
+  Game.setBoard(3,new TitleScreen("Galaxy Wars", 
                                   "Press fire to begin playing!",
+                                  "",
                                   playGame));
 };
+
+//*****************************************************
+// LEVELS
+//*****************************************************
 
 var level1 = [
  // Start,   End, Gap,  Type,   Override
@@ -70,36 +75,123 @@ var level2 = [
   [ 22000,  25000, 400, 'step' ]
 ];
 
+var level3 = [
+ // Start,   End, Gap,  Type,   Override
+  [ 0,       4000, 500, 'wiggle', { x: 127 } ],
+  [ 6000,   13000, 800, 'straight', { x: 450 } ],
+  [ 10000,  16000, 400, 'step' ],
+  [ 12000,  16000, 500, 'wiggle', { x: 75 }],    
+  [ 17800,  20000, 500, 'straight', { x: 350 } ],
+  [ 17800,  20000, 500, 'circle' ],
+  [ 18200,  20000, 800, 'straight', { x: 240 } ],
+  [ 18200,  20000, 500, 'circle' ],
+  [ 18200,  20000, 500, 'straight', { x: 100 } ],
+  [ 22000,  25000, 700, 'wiggle', { x: 230 }],
+  [ 22000,  25000, 400, 'step' ]
+];
 
+var level4 = [
+ // Start,   End, Gap,  Type,   Override
+  [ 0,       4000, 500, 'wiggle', { x: 300 } ],
+  [ 0,       4000, 500, 'wiggle', { x: 15 } ],
+  [ 6000,   13000, 800, 'straight', { x: 450 } ],
+  [ 8000,   12000, 500, 'circle' ],
+  [ 10000,  16000, 400, 'step' ],
+  [ 12000,  16000, 500, 'wiggle', { x: 95 }],    
+  [ 17800,  20000, 500, 'straight', { x: 350 } ],
+  [ 17800,  20000, 500, 'circle' ],
+  [ 18200,  20000, 800, 'straight', { x: 240 } ],
+  [ 18200,  20000, 500, 'circle' ],
+  [ 18200,  20000, 500, 'straight', { x: 100 } ],
+  [ 19000,  23000, 500, 'circle' ],
+  [ 22000,  25000, 700, 'wiggle', { x: 230 }],
+  [ 22000,  25000, 400, 'straight', { x: 125 } ],
+  [ 22000,  25000, 400, 'straight', { x: 64 } ],
+  [ 22000,  25000, 400, 'straight', { x: 385 } ]
+];
+
+
+//*****************************************************
+// ACTUAL RUNNING OF THE GAME
+//*****************************************************
+
+
+// TITLE SCREEN/FIRST LEVEL
 var playGame = function() {
   var board = new GameBoard();
   board.add(new PlayerShip());
-  board.add(new Level(level1,beatLevel));
+  board.add(new Level(level1,beatLevel1));
   Game.setBoard(3,board);
   Game.setBoard(5,new GamePoints(0));
 };
 
+
+// SECOND LEVEL
 var playGame2 = function() {
   var board = new GameBoard();
   board.add(new PlayerShip());
-  board.add(new Level(level2,winGame));
+  board.add(new Level(level2,beatLevel2));
   Game.setBoard(3,board);
 };
 
-var beatLevel = function() {
-  Game.setBoard(3,new TitleScreen("Misson Complete!", 
+// THIRD LEVEL
+var playGame3 = function() {
+  var board = new GameBoard();
+  board.add(new PlayerShip());
+  board.add(new Level(level3,beatLevel3));
+  Game.setBoard(3,board);
+};
+
+// FOURTH LEVEL
+var playGame4 = function() {
+  var board = new GameBoard();
+  board.add(new PlayerShip());
+  board.add(new Level(level4,winGame));
+  Game.setBoard(3,board);
+};
+
+//*****************************************************
+// TRANSITION/LOADING SCREENS
+//*****************************************************
+
+// Level 1 Complete Screen
+var beatLevel1 = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!",
+                                  "1 out of 10 Missions Complete!",
                                   "Press fire to begin the next mission!",
                                   playGame2));
 };
 
+
+// Level 2 Complete Screen
+var beatLevel2 = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!",
+                                  "2 out of 10 Missions Complete!",
+                                  "Press fire to begin the next mission!",
+                                  playGame3));
+};
+
+// Level 3 Complete Screen
+var beatLevel3 = function() {
+  Game.setBoard(3,new TitleScreen("Misson Complete!",
+                                  "3 out of 10 Missions Complete!",
+                                  "Press fire to begin the next mission!",
+                                  playGame4));
+};
+
+
+// Beat Game Screen
 var winGame = function() {
-  Game.setBoard(3,new TitleScreen("You win!", 
+  Game.setBoard(3,new TitleScreen("You Win!", 
+                                  "You Saved the Galaxy!",
                                   "Press fire to play again",
                                   playGame));
 };
 
+// Lose Game Screen
 var loseGame = function() {
-  Game.setBoard(3,new TitleScreen("You lose!", 
+  Game.setBoard(3,new TitleScreen("Game Over!", 
+                                  "You failed to save the Galaxy!",
                                   "Press fire to play again",
                                   playGame));
 };
